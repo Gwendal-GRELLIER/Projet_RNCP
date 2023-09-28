@@ -6,6 +6,7 @@ def get_gene_name_and_description(html):
 
     gene_name = None
     gene_description = None
+    ntpm = None
 
     # Recherche des balises <th> contenant les en-têtes
     th_tags = soup.find_all("th", class_="keywidth")
@@ -22,13 +23,32 @@ def get_gene_name_and_description(html):
             gene_description = th_tag.find_next("td").text.strip()
             break
 
-    return gene_name, gene_description
+
+
+
+ # Recherche des balises <text> avec la classe "barchartlabel"
+    text_tags = soup.find_all("text", class_="barchartlabel")
+    print(text_tags)
+    for text_tag in text_tags:
+        # Vérifiez si le texte contient "nTPM:"
+        if "nTPM:" in text_tag.get("title") and "Classical monocyte" in text_tag.get("title") :
+            # Si oui, extrayez la valeur de nTPM
+            title = text_tag.get("title")
+            ntpm = title.split("nTPM:")[1].split("<br>")[0].strip()
+              # Sortir de la boucle après avoir trouvé la première occurrence
+            break
+
+
+    return gene_name, gene_description ,ntpm
+
 
 # Exemple d'utilisation :
 
 html = requests.get("https://www.proteinatlas.org/ENSG00000101981-F9/immune+cell")
 
-gene_name, gene_description = get_gene_name_and_description(html)
+gene_name, gene_description, ntpm= get_gene_name_and_description(html)
+
+print(ntpm)
 
 print(gene_name)
 print(gene_description)
