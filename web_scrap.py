@@ -40,9 +40,7 @@ def get_all_links(url):
 links = get_all_links("https://www.proteinatlas.org/search/cell_type_category_rna%3AT-cells%2CB-cells%2CPlasma+cells%2CNK-cells%2Cgranulocytes%2Cmonocytes%2CMacrophages%2CHofbauer+cells%2CKupffer+cells%2Cdendritic+cells%2CLangerhans+cells%2CErythroid+cells%3BCell+type+enriched%2CGroup+enriched%2CCell+type+enhanced+AND+sort_by%3Atissue+specific+score")
 print(len(links))
 for link in links:
-    target_page = requests.get(f"https://www.proteinatlas.org{link}")
-    source = BeautifulSoup(target_page.content, "html.parser")
-    infos = source.find
+    print(link)
 
 
     
