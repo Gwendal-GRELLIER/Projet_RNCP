@@ -30,10 +30,10 @@ try:
     dynamodb.create_table(
         TableName=table_name,
         KeySchema=[
-            {"AttributeName": "id", "KeyType": "HASH"}  # Clé primaire
+            {"AttributeName": "obs_id", "KeyType": "HASH"}  # Clé primaire
         ],
         AttributeDefinitions=[
-            {"AttributeName": "id", "AttributeType": "N"}  # Attribut id de type nombre
+            {"AttributeName": "obs_id", "AttributeType": "S"},  # Attribut obs_id de type chaîne
         ],
         ProvisionedThroughput={
             "ReadCapacityUnits": 25,
@@ -54,10 +54,26 @@ table.wait_until_exists()
 reader = csv.DictReader(sys.stdin)
 nombre_lignes = 0
 for row in reader:
+    # Convertir la chaîne "control" en booléen
+    control_value = row["control"].strip().lower()
+    is_control = control_value == "true"
+
     item = {
-        "id": {'N': row["id"]},
+        "obs_id": {'S': row["obs_id"]},
+        "library_id": {'S': row["library_id"]},
+        "plate_name": {'S': row["plate_name"]},
+        "well": {'S': row["well"]},
+        "row": {'S': row["row"]},
+        "col": {'N': row["col"]},
+        "cell_id": {'S': row["cell_id"]},
+        "donor_id": {'S': row["donor_id"]},
         "cell_type": {'S': row["cell_type"]},
-        "sm_name": {'S': row["sm_name"]}
+        "sm_lincs_id": {'S': row["sm_lincs_id"]},
+        "sm_name": {'S': row["sm_name"]},
+        "SMILES": {'S': row["SMILES"]},
+        "dose_uM": {'N': row["dose_uM"]},
+        "timepoint_hr": {'N': row["timepoint_hr"]},
+        "control": {'BOOL': is_control}
     }
 
     dynamodb.put_item(TableName=table_name, Item=item)

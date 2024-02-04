@@ -54,14 +54,14 @@ table.wait_until_exists()
 reader = csv.DictReader(sys.stdin)
 nombre_lignes = 0
 for row in reader:
-    item = {
-        "id": {'N': row["id"]},
-        "cell_type": {'S': row["cell_type"]},
-        "sm_name": {'S': row["sm_name"]}
-    }
+    item = {"id": {'N': row["id"]}}
+
+    for column, value in row.items():
+        if column != "id":
+            item[column] = {'N': value}
 
     dynamodb.put_item(TableName=table_name, Item=item)
-
+    
     nombre_lignes += 1
 
 print(f"Les {nombre_lignes} lignes du fichier {file_name} ont été insérées dans la table {table_name} de DynamoDB.")

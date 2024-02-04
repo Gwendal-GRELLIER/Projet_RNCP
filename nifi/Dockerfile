@@ -10,17 +10,21 @@ RUN apt-get update && apt-get install -y python3 python3-pip dos2unix
 # Installer le module boto3
 RUN pip3 install boto3
 
+# Installer les modules pandas et pyarrow
+RUN pip3 install pandas pyarrow
+
 # Afficher le chemin de l'interpréteur Python
 RUN which python3
 
-# Copier les scripts Python dans l'image
-COPY ./scripts /opt/nifi/python_scripts
+# Copier les scripts Python et le fichier de configuration dans l'image
+COPY ./scripts /opt/nifi/rncp_files
+COPY ./config.json /opt/nifi/rncp_files
 
 # Convertir les scripts au format Unix
-RUN dos2unix /opt/nifi/python_scripts/*
+RUN dos2unix /opt/nifi/rncp_files/*
 
 # Rendre les scripts exécutables
-RUN chmod +x /opt/nifi/python_scripts/*
+RUN chmod +x /opt/nifi/rncp_files/*
 
 # Définir la variable d'environnement pour le port HTTP de NiFi
 ENV NIFI_WEB_HTTP_PORT 8080

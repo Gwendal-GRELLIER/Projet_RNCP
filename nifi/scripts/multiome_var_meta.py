@@ -30,10 +30,12 @@ try:
     dynamodb.create_table(
         TableName=table_name,
         KeySchema=[
-            {"AttributeName": "id", "KeyType": "HASH"}  # Clé primaire
+            {"AttributeName": "location", "KeyType": "HASH"},  # Clé primaire
+            {"AttributeName": "gene_id", "KeyType": "RANGE"}  # Clé de tri
         ],
         AttributeDefinitions=[
-            {"AttributeName": "id", "AttributeType": "N"}  # Attribut id de type nombre
+            {"AttributeName": "location", "AttributeType": "S"},  # Attribut location de type chaîne
+            {"AttributeName": "gene_id", "AttributeType": "S"}  # Attribut gene_id de type chaîne
         ],
         ProvisionedThroughput={
             "ReadCapacityUnits": 25,
@@ -55,9 +57,11 @@ reader = csv.DictReader(sys.stdin)
 nombre_lignes = 0
 for row in reader:
     item = {
-        "id": {'N': row["id"]},
-        "cell_type": {'S': row["cell_type"]},
-        "sm_name": {'S': row["sm_name"]}
+        "location": {'S': row["location"]},
+        "gene_id": {'S': row["gene_id"]},
+        "feature_type": {'S': row["feature_type"]},
+        "genome": {'S': row["genome"]},
+        "interval": {'S': row["interval"]}
     }
 
     dynamodb.put_item(TableName=table_name, Item=item)
