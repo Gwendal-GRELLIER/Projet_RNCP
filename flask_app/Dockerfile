@@ -9,7 +9,7 @@ WORKDIR /app
 RUN pip install flask requests
 
 # Exposez le port sur lequel votre application Flask fonctionnera
-EXPOSE 5000
+EXPOSE 8080
 
 # Commande pour démarrer l'application Flask
 CMD ["python", "flask_app.py"]

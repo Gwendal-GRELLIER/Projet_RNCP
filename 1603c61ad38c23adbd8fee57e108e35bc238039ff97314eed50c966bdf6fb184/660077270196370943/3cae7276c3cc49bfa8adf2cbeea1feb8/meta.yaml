@@ -1,0 +1,15 @@
+artifact_uri: /workspaces/Projet_RNCP/1603c61ad38c23adbd8fee57e108e35bc238039ff97314eed50c966bdf6fb184/660077270196370943/3cae7276c3cc49bfa8adf2cbeea1feb8/artifacts
+end_time: 1707259013313
+entry_point_name: ''
+experiment_id: '660077270196370943'
+lifecycle_stage: active
+run_id: 3cae7276c3cc49bfa8adf2cbeea1feb8
+run_name: NN_classic_default
+run_uuid: 3cae7276c3cc49bfa8adf2cbeea1feb8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1707259004723
+status: 3
+tags: []
+user_id: codespace
