@@ -1,37 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLflow Flask App</title>
-</head>
-<body>
-    <h1>MLflow Flask App</h1>
-    <form id="prediction-form">
-        <label for="feature1">Feature 1:</label>
-        <input type="number" id="feature1" name="feature1" required><br><br>
-        <label for="feature2">Feature 2:</label>
-        <input type="number" id="feature2" name="feature2" required><br><br>
-        <button type="submit">Predict</button>
-    </form>
-    <div id="prediction-result"></div>
+from flask import Flask, request, jsonify
+import mlflow.pyfunc
+import pandas as pd
+from flask import render_template
+import os
 
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            fetch('/predict', {
-                method: 'POST',
-                body: JSON.stringify(Object.fromEntries(formData)),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('prediction-result').innerText = 'Predicted output: ' + data.predictions;
-            });
-        });
-    </script>
-</body>
-</html>
+
+
+app = Flask(__name__, template_folder='templates')
+
+
+# Définir l'URI de MLflow à partir de la variable d'environnement MLFLOW_TRACKING_URI
+mlflow_tracking_uri =  "http://0.0.0.0:5000"
+
+# Charger le modèle MLflow en utilisant l'URI de suivi spécifié
+mlflow.set_tracking_uri(mlflow_tracking_uri)
+logged_model = 'runs:/50c428d16b5e403fbd9c4ba76219adcc/NN_classic_base'
+
+# Load model as a PyFuncModel.
+loaded_model = mlflow.pyfunc.load_model(logged_model)
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# Endpoint pour effectuer les prédictions
+@app.route('/predict', methods=['POST'])
+def predict():
+    try:
+        data = request.get_json()
+        df = pd.DataFrame(data)
+        
+        # Prédiction sur le DataFrame Pandas
+        predictions = loaded_model.predict(df)
+        
+        # Renvoyer les prédictions au format JSON
+        return jsonify({'predictions': predictions.tolist()})
+    
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=8080)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Import necessary libraries
+# from flask import Flask, request, jsonify  # Import Flask for web app, request for HTTP handling, and jsonify for JSON responses
+# import pandas as pd  # Import pandas for data manipulation
+# import mlflow.pyfunc  # Import mlflow.pyfunc for loading MLflow models
+
+# # Import necessary libraries
+# import mlflow
+
+# # Get the MLflow tracking URI
+# mlflow_tracking_uri = mlflow.set_tracking_uri('http://0.0.0.0:5000')
+
+# # Use the tracking URI to build the model URI
+# latest_run = mlflow.search_runs(order_by=["start_time desc"]).iloc[0]
+# model_uri = f"{mlflow_tracking_uri}/0/{latest_run.run_id}/artifacts/model"
+
+# # Load the MLflow model using mlflow.pyfunc.load_model()
+# loaded_model = mlflow.pyfunc.load_model(model_uri)
+
+# # Now you can use `loaded_model` to make predictions or perform other operations with the loaded model.
+
+# app = Flask(__name__)  # Initialize a Flask application
+
+# # Define a route and function for making predictions
+# @app.route('/predict', methods=['POST'])  # Define a route '/predict' that accepts HTTP POST requests
+# def predict():
+#     try:
+#         # Get input data from the request
+#         input_data = request.get_json()  # Extract JSON data from the HTTP request
+
+#         # Make predictions using the loaded model
+#         predictions = loaded_model.predict(pd.DataFrame(input_data))  # Use the model to make predictions on input data
+
+#         # Return predictions as a JSON response
+#         return jsonify({"predictions": predictions.tolist()})  # Convert predictions to a JSON response
+    
+#     except Exception as e:
+#         # Handle exceptions (e.g., invalid input or model errors) and return an error message as a JSON response
+#         return jsonify({"error": str(e)})  # Convert the exception message to a JSON response
+
+# # Run the Flask application if the script is executed directly
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=8080)  # Start the Flask development server on host '0.0.0.0' and port 8080

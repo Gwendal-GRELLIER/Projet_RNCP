@@ -2,13 +2,14 @@ FROM python:3.9
 
 # Installation de Flask et autres dépendances
 RUN pip install flask
+RUN pip install mlflow
 
 # Copie de l'application Flask dans le conteneur
 COPY . /app
 WORKDIR /app
 
 # Expose le port pour l'application Flask
-EXPOSE 8080
+EXPOSE 
 
 # Commande par défaut pour démarrer l'application Flask
 CMD ["python", "app.py"]

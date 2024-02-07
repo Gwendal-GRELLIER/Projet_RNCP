@@ -1,0 +1,15 @@
+artifact_uri: /workspaces/Projet_RNCP/Modèles_learning_auto/e161512c3a65e2ebc25f1cbca3bff6caec8b56336253427fd1990cc122a73b7c/448895371641326572/aa1a964fe35b4a6daf5c2a8cad00b709/artifacts
+end_time: 1707328982860
+entry_point_name: ''
+experiment_id: '448895371641326572'
+lifecycle_stage: active
+run_id: aa1a964fe35b4a6daf5c2a8cad00b709
+run_name: NN_classic_default_test
+run_uuid: aa1a964fe35b4a6daf5c2a8cad00b709
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1707328974445
+status: 3
+tags: []
+user_id: codespace
