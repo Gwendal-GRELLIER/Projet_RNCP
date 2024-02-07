@@ -1,0 +1,88 @@
+version: '3'
+
+services:
+  mlflow:
+    build: 
+      context: ./ML_flow_server
+      dockerfile: Dockerfile.mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow-data:/mlflow
+    depends_on:
+      - db
+
+  db:
+    build: 
+      context: ./Database
+      dockerfile: Dockerfile.db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: your_username
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: mlflow_db
+
+  flask:
+    build:
+      context: ./flask_app
+      dockerfile: Dockerfile.flask
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mlflow
+
+volumes:
+  mlflow-data:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# version: '3.8'
+
+# services:
+#     db:
+#         restart: always
+#         image: mysql-server:5.7.28
+#         container_name: mlflow_db
+#         expose:
+#             - "3306"
+#         environment:
+#             - MYSQL_DATABASE=my_database
+#             - MYSQL_USER=my_user
+#             - MYSQL_PASSWORD=admin
+#             - MYSQL_ROOT_PASSWORD=admin
+
+#         volumes:
+#             - /workspaces/Projet_RNCP/mysql
+
+#     web:
+#         restart: always
+#         build: ./mlflow
+#         container_name: mlflow_server
+#         expose:
+#             - "5000"
+#         environment:
+#             - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+#             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+#             - AWS_DEFAULT_REGION=eu-west-3
+#         command: mlflow server --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE} --default-artifact-root s3://mlflow_bucket/mlflow/ --host 0.0.0.0        
+
+# networks:
+#     backend:
+#         driver: bridge
+
+# volumes:
+#     dbdata:

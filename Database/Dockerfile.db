@@ -1,0 +1,3 @@
+FROM postgres:latest
+
+# Optionnel : personnalisation de la configuration PostgreSQL si nécessaire

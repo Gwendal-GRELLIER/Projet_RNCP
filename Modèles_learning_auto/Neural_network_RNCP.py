@@ -61,7 +61,7 @@ model.add(layers.Dense(18211, activation='linear'))  # Utilisez une activation l
 
 
 # Démarrez une session MLflow
-mlflow.set_tracking_uri("/local/path:/data/")  # URI du serveur MLflow 
+mlflow.set_tracking_uri("http://0.0.0.0:5000")  # URI du serveur MLflow 
 mlflow.set_experiment("Deep_learning")
 
 import mlflow.tensorflow
