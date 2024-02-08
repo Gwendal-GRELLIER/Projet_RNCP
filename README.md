@@ -61,3 +61,8 @@ mysql> SHOW DATABASES;
 
 mysql> exit
 Bye
+
+docker-compose down
+docker rmi -f $(docker images -q)
+docker-compose build
+docker-compose compose up -d

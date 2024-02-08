@@ -9,7 +9,7 @@ COPY . /app
 WORKDIR /app
 
 # Expose le port pour l'application Flask
-EXPOSE 
+EXPOSE 8080
 
 # Commande par défaut pour démarrer l'application Flask
 CMD ["python", "app.py"]

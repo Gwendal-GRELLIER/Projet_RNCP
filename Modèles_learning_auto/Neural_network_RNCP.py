@@ -66,7 +66,7 @@ mlflow.set_experiment("Deep_learning")
 
 import mlflow.tensorflow
 
-with mlflow.start_run(run_name='NN_classic_default'):
+with mlflow.start_run(run_name='NN_classic_default_final'):
     # Log des hyperparamètres
     mlflow.log_param("optimizer", "adam")
     mlflow.log_param("epochs", 10)
@@ -85,8 +85,14 @@ with mlflow.start_run(run_name='NN_classic_default'):
     mlflow.log_metric("val_mae", history.history['val_mae'][-1])
 
     # Enregistrer le modèle
-    mlflow.tensorflow.log_model(model, "NN_classic_base")
-
+    mlflow.tensorflow.log_model(model, "NN_classic_base_final") #,artifact_path=""
+   
 # Arrête le run en cours
 mlflow.end_run()
 
+
+
+
+
+ # Enregistrer le modèle dans le volume Docker
+   # mlflow.sklearn.log_model(model, "model", artifact_path="/mnt/mlruns")
